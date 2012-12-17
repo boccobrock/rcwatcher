@@ -1,0 +1,23 @@
+.diffchange .diffchange-inline
+{
+    color: yellow;
+}
+.diff-lineno
+{
+    color: blue;
+}
+.diff-deletedline
+{
+    color: red;
+    float: left;
+}
+.diff-marker
+{
+    display: none;
+}
+.diff-addedline
+{
+    color: green;
+    float: right;
+    text-align: left;
+}
