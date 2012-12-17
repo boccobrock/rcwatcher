@@ -1,8 +1,0 @@
-[Desktop Entry]
-_Name=Rcwatcher
-_Comment=Rcwatcher application
-Categories=GNOME;Utility;
-Exec=rcwatcher
-Icon=rcwatcher
-Terminal=false
-Type=Application

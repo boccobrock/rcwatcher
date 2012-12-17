@@ -1,9 +1,0 @@
-<glade-catalog name="about_rcwatcher_dialog" domain="glade-3" 
-               depends="gtk+" version="1.0">
-  <glade-widget-classes>
-    <glade-widget-class title="About Rcwatcher Dialog" name="AboutRcwatcherDialog" 
-                        generic-name="AboutRcwatcherDialog" parent="GtkAboutDialog"
-                        icon-name="widget-gtk-about-dialog"/>
-  </glade-widget-classes>
-
-</glade-catalog>
