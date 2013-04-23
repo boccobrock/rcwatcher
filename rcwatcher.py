@@ -28,7 +28,8 @@ class Page(object):
         return self.timestamp
 
 class Rcwatcher:
-    diffs = Queue.Queue()
+    diffs = []
+    current = 0
     def __init__(self):
         self.window = gtk.Window(gtk.WINDOW_TOPLEVEL)
         self.window.set_position(gtk.WIN_POS_CENTER_ALWAYS)
@@ -52,9 +53,20 @@ class Rcwatcher:
 
     def next(self):
         diff = open('diff/diff.html', 'w')
-        if(self.diffs.empty()):
+        if self.current >= len(self.diffs):
             self.getRecent()
-        page = self.diffs.get()
+        self.current += 1
+        page = self.diffs[self.current]
+        diff.write("<link rel='stylesheet' type='text/css' href='"+os.getcwd()+"/diff/stylediff.css' />\n<table>"+str(page.getDiff())+"</table>")
+        self.title.set_text(page.getTitle() + " - " + page.getTimestamp())
+        self.window.set_title('RCWatcher')
+        self.webview.open(os.getcwd()+"/diff/diff.html")
+
+    def prev(self):
+        diff = open('diff/diff.html', 'w')
+        if self.current > 0:
+            self.current -= 1
+        page = self.diffs[self.current]
         diff.write("<link rel='stylesheet' type='text/css' href='"+os.getcwd()+"/diff/stylediff.css' />\n<table>"+str(page.getDiff())+"</table>")
         self.title.set_text(page.getTitle() + " - " + page.getTimestamp())
         self.window.set_title('RCWatcher')
@@ -69,24 +81,24 @@ class Rcwatcher:
     def getDiff(self, pageid, rev, oldrev):
         diffurl = 'http://en.wikipedia.org/w/api.php?action=compare&fromrev='+rev+'&torev='+oldrev+'&format=xml'
         r = requests.get(diffurl)
-        diff = ET.fromstring(r.content);
+        diff = ET.fromstring(r.content)
         return diff[0].text
 
     def getRecent(self):
         r = requests.get('http://en.wikipedia.org/w/api.php?action=query&list=recentchanges&format=xml')
-        response = ET.fromstring(r.content);
+        response = ET.fromstring(r.content)
 
-        for recent in response[0][0]:
+        for recent in response.iter("rc"):
             content = self.getDiff(recent.attrib.get('pageid'), recent.attrib.get('revid'), recent.attrib.get('old_revid'))
             if(content is not None):
                 page = Page(content, recent.attrib.get('title'), recent.attrib.get('timestamp'))
-                self.diffs.put(page)
+                self.diffs.append(page)
 
     def keyPressed(self, contentbuffer, event):
         if(event.keyval == 106):
             self.next()
         elif(event.keyval == 107):
-            print "k!"
+            self.prev()
         elif(event.keyval == 114):
             print "r!"
         elif(event.keyval == 100):
