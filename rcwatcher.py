@@ -52,22 +52,20 @@ class Rcwatcher:
         self.window.maximize()
 
     def next(self):
-        diff = open('diff/diff.html', 'w')
-        if self.current >= len(self.diffs):
+        if self.current+1 >= len(self.diffs):
             self.getRecent()
         self.current += 1
-        page = self.diffs[self.current]
-        diff.write("<link rel='stylesheet' type='text/css' href='"+os.getcwd()+"/diff/stylediff.css' />\n<table>"+str(page.getDiff())+"</table>")
-        self.title.set_text(page.getTitle() + " - " + page.getTimestamp())
-        self.window.set_title('RCWatcher')
-        self.webview.open(os.getcwd()+"/diff/diff.html")
+        self.getcurrent()
 
     def prev(self):
-        diff = open('diff/diff.html', 'w')
         if self.current > 0:
             self.current -= 1
+        self.getcurrent()
+
+    def getcurrent(self):
+        diff = open('diff/diff.html', 'w')
         page = self.diffs[self.current]
-        diff.write("<link rel='stylesheet' type='text/css' href='"+os.getcwd()+"/diff/stylediff.css' />\n<table>"+str(page.getDiff())+"</table>")
+        diff.write("<meta charset='utf-8'><link rel='stylesheet' type='text/css' href='"+os.getcwd()+"/diff/stylediff.css' />\n<table>"+str(page.getDiff())+"</table>")
         self.title.set_text(page.getTitle() + " - " + page.getTimestamp())
         self.window.set_title('RCWatcher')
         self.webview.open(os.getcwd()+"/diff/diff.html")

@@ -2,9 +2,13 @@
 {
     color: yellow;
 }
+table {
+    width: 100%;
+}
 .diff-lineno
 {
     color: blue;
+    float: left;
 }
 .diff-deletedline
 {
@@ -13,7 +17,6 @@
 }
 .diff-marker
 {
-    display: none;
 }
 .diff-addedline
 {
