@@ -62,6 +62,10 @@ class Rcwatcher:
             self.current -= 1
         self.getcurrent()
 
+    def view(self):
+	page = self.diffs[self.current]
+	self.webview.open("http://en.wikipedia.org/wiki/"+page.getTitle())
+
     def getcurrent(self):
         diff = open('diff/diff.html', 'w')
         page = self.diffs[self.current]
@@ -91,20 +95,18 @@ class Rcwatcher:
             if(content is not None):
                 page = Page(content, recent.attrib.get('title'), recent.attrib.get('timestamp'))
                 self.diffs.append(page)
-
+    
     def keyPressed(self, contentbuffer, event):
         if(event.keyval == 106):
             self.next()
         elif(event.keyval == 107):
             self.prev()
+        elif(event.keyval == 118):
+	    self.view()
         elif(event.keyval == 114):
             print "r!"
         elif(event.keyval == 100):
             print "d!"
-        elif(event.keyval == 65362):
-            print "up!"
-        elif(event.keyval == 65364):
-            print "down!"
         elif(event.keyval == 113):
             gtk.main_quit()
 
